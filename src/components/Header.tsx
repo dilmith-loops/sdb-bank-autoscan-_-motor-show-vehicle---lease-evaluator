@@ -2,7 +2,7 @@ import React from 'react';
 import { SDBLogo } from './SDBLogo';
 import { UserProfile } from '../types';
 import { SDB_MOTOR_SHOW_CONFIG } from '../data/salaryRanges';
-import { User, Car, Sparkles, MapPin, CheckCircle2 } from 'lucide-react';
+import { User, Car, Sparkles, MapPin, CheckCircle2, LogOut } from 'lucide-react';
 
 interface HeaderProps {
   userProfile: UserProfile | null;
@@ -10,6 +10,7 @@ interface HeaderProps {
   onOpenProfile: () => void;
   onOpenSavedScans: () => void;
   onOpenPavilionInfo: () => void;
+  onLogout: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -18,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenProfile,
   onOpenSavedScans,
   onOpenPavilionInfo,
+  onLogout,
 }) => {
   const isProfileComplete = userProfile && !userProfile.isGuest;
 
@@ -96,6 +98,16 @@ export const Header: React.FC<HeaderProps> = ({
               </>
             )}
             <User className="w-3.5 h-3.5 opacity-60 ml-0.5" />
+          </button>
+
+          {/* Logout Button */}
+          <button
+            onClick={onLogout}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border border-slate-200 hover:border-rose-300 text-slate-600 hover:text-rose-600 hover:bg-rose-50 transition-all active:scale-95"
+            title="Log out and return to onboarding screen"
+          >
+            <LogOut className="w-3.5 h-3.5 text-rose-500" />
+            <span className="hidden sm:inline">Log Out</span>
           </button>
         </div>
       </div>

@@ -16,6 +16,7 @@ import {
   Check,
   Info,
   Car,
+  LogOut,
 } from 'lucide-react';
 
 interface ProfileModalProps {
@@ -23,6 +24,7 @@ interface ProfileModalProps {
   onClose: () => void;
   currentProfile: UserProfile | null;
   onSaveProfile: (profile: UserProfile) => void;
+  onLogout?: () => void;
 }
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({
@@ -30,6 +32,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   onClose,
   currentProfile,
   onSaveProfile,
+  onLogout,
 }) => {
   if (!isOpen) return null;
 
@@ -93,6 +96,21 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
       <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden my-6">
         {/* Header pattern */}
         <div className="bg-gradient-to-br from-[#005288] via-[#0077c8] to-[#0284c7] p-5 text-white relative">
+          {onLogout && currentProfile && !currentProfile.isGuest && (
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onLogout();
+              }}
+              className="absolute top-4 right-14 flex items-center gap-1 text-[11px] font-semibold bg-white/20 hover:bg-rose-500 hover:text-white text-white px-2.5 py-1 rounded-full transition-colors"
+              title="Log out and return to onboarding"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Log Out</span>
+            </button>
+          )}
+
           <button
             onClick={onClose}
             className="absolute top-4 right-4 p-1.5 rounded-full bg-white/20 hover:bg-white/30 transition-colors"

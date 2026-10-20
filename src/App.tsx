@@ -17,7 +17,7 @@ import { PreApprovalPassModal } from './components/PreApprovalPassModal';
 import { SavedScansModal } from './components/SavedScansModal';
 import { PavilionModal } from './components/PavilionModal';
 import { SDBLogo } from './components/SDBLogo';
-import { SplashScreen } from './components/SplashScreen';
+import { OnboardingScreen } from './components/OnboardingScreen';
 import {
   Sparkles,
   Camera,
@@ -84,7 +84,72 @@ export default function App() {
   const [isPreApprovalModalOpen, setIsPreApprovalModalOpen] = useState(false);
   const [isSavedScansModalOpen, setIsSavedScansModalOpen] = useState(false);
   const [isPavilionModalOpen, setIsPavilionModalOpen] = useState(false);
-  const [showSplash, setShowSplash] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState<boolean>(() => {
+    try {
+      return !localStorage.getItem('sdb_onboarding_seen');
+    } catch {
+      return true;
+    }
+  });
+
+  const handleOnboardingFinish = (registeredName?: string) => {
+    if (registeredName && registeredName.trim()) {
+      const trimmed = registeredName.trim();
+      const updated: UserProfile = {
+        ...userProfile,
+        name: trimmed,
+        isGuest: false,
+        registeredAt: new Date().toISOString(),
+      };
+      setUserProfile(updated);
+      try {
+        localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(updated));
+      } catch (e) {
+        console.error(e);
+      }
+      showToast(`Welcome, ${trimmed}! Registration complete.`);
+    }
+    try {
+      localStorage.setItem('sdb_onboarding_seen', '1');
+    } catch {}
+    setShowOnboarding(false);
+  };
+
+  const handleLogout = () => {
+    const defaultProfile: UserProfile = {
+      name: '',
+      email: '',
+      phone: '',
+      city: 'Colombo',
+      salaryRange: SALARY_RANGES[1],
+      familySize: 3,
+      preferences: {
+        fuelEfficiencyPriority: 'HIGH',
+        preferredFuelType: 'HYBRID',
+        safetyRatingPriority: '5_STAR',
+        targetMonthlyInstallment: 80000,
+      },
+      isGuest: true,
+    };
+    setUserProfile(defaultProfile);
+
+    try {
+      localStorage.removeItem(STORAGE_KEYS.PROFILE);
+      localStorage.removeItem('sdb_onboarding_seen');
+    } catch (e) {
+      console.warn('Error clearing stored data on logout:', e);
+    }
+
+    setIsProfileModalOpen(false);
+    setIsResultModalOpen(false);
+    setIsPreApprovalModalOpen(false);
+    setIsSavedScansModalOpen(false);
+    setIsPavilionModalOpen(false);
+
+    setShowOnboarding(true);
+    showToast('You have logged out. Returning to onboarding screen.');
+  };
+
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -209,10 +274,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-100/70 text-slate-900 flex flex-col font-sans">
-      {/* Animated Splash Screen — AnimatePresence lives here so the exit
-           animation completes before the component is removed from the DOM */}
+      {/* Onboarding Screen — shown once per browser; AnimatePresence here
+           ensures the exit animation completes before unmounting */}
       <AnimatePresence>
-        {showSplash && <SplashScreen key="splash" onFinish={() => setShowSplash(false)} />}
+        {showOnboarding && (
+          <OnboardingScreen key="onboarding" onFinish={handleOnboardingFinish} />
+        )}
       </AnimatePresence>
 
       {/* Top Header */}
@@ -222,6 +289,7 @@ export default function App() {
         onOpenProfile={() => setIsProfileModalOpen(true)}
         onOpenSavedScans={() => setIsSavedScansModalOpen(true)}
         onOpenPavilionInfo={() => setIsPavilionModalOpen(true)}
+        onLogout={handleLogout}
       />
 
       {/* Main Content Container */}
@@ -370,6 +438,7 @@ export default function App() {
         onClose={() => setIsProfileModalOpen(false)}
         currentProfile={userProfile}
         onSaveProfile={handleSaveProfile}
+        onLogout={handleLogout}
       />
 
       <VehicleResultModal
