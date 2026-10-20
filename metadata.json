@@ -1,0 +1,6 @@
+{
+  "name": "SDB Bank AutoScan | Motor Show Vehicle & Lease Evaluator",
+  "description": "Scan any vehicle at the Motor Show to verify specs, condition, Sri Lankan market price, and calculate personalized SDB Bank leasing installments.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

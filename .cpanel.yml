@@ -1,0 +1,11 @@
+---
+deployment:
+  tasks:
+    # 1. Update DEPLOYPATH to match your cPanel Node.js Application Root:
+    # Example: /home/USERNAME/sdb or /home/USERNAME/public_html/sdb
+    - export DEPLOYPATH=/home/$USER/sdb
+    - /bin/mkdir -p $DEPLOYPATH
+    - /bin/cp -R * $DEPLOYPATH
+    - /bin/mkdir -p $DEPLOYPATH/tmp
+    # 2. Trigger Phusion Passenger reload
+    - /bin/touch $DEPLOYPATH/tmp/restart.txt
