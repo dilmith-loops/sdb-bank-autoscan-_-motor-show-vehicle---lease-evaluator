@@ -179,7 +179,7 @@ export default function App() {
     setIsAnalyzing(true);
 
     try {
-      // Call backend API with Gemini 3.8 Flash
+      // Call backend AI vehicle scan API
       const response = await fetch(withBasePath('/api/scan-vehicle'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -309,7 +309,7 @@ export default function App() {
             </h1>
 
             <p className="text-xs sm:text-sm text-blue-100 leading-relaxed">
-              Scan any vehicle anywhere in the exhibition hall. Gemini AI inspects condition, estimates prevailing Sri Lankan market price in LKR, and calculates your personalized monthly lease rental.
+              Scan any vehicle anywhere in the exhibition hall. AutoScan AI inspects condition, estimates prevailing Sri Lankan market price in LKR, and calculates your personalized monthly lease rental.
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-2 sm:gap-3 text-xs">
@@ -370,7 +370,7 @@ export default function App() {
               <div className="space-y-0.5">
                 <h4 className="text-xs font-bold text-slate-900">AI Valuation & Condition</h4>
                 <p className="text-[11px] text-slate-500 leading-relaxed">
-                  Gemini verifies paint, body gaps, fuel economy, and Sri Lanka market price (Ikman/Riyasewana).
+                  AutoScan AI verifies paint, body gaps, fuel economy, and Sri Lanka market price (Ikman/Riyasewana).
                 </p>
               </div>
             </div>

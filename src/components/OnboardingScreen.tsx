@@ -5,9 +5,7 @@ import {
   Camera,
   Coins,
   FileCheck,
-  ShieldCheck,
   ChevronRight,
-  MapPin,
   Sparkles,
   User,
   UserPlus,
@@ -28,7 +26,7 @@ const SLIDES = [
     iconBorder: 'border-cyan-400/30',
     title: 'Scan Any Vehicle Instantly',
     description:
-      'Point your camera at any car in the exhibition hall. Gemini AI inspects body condition, paint quality, and fuel economy in seconds.',
+      'Point your camera at any car in the exhibition hall. AutoScan AI inspects body condition, paint quality, and fuel economy in seconds.',
     badge: 'Step 1 of 3',
   },
   {
@@ -318,18 +316,6 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onFinish }) 
             <span>Register</span>
           </motion.button>
         )}
-
-        {/* Booth info */}
-        <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-400">
-          <MapPin className="w-3.5 h-3.5 text-amber-400" />
-          <span>Visit SDB Booth A-04 at Colombo Motor Show</span>
-        </div>
-
-        {/* Trust line */}
-        <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-500 tracking-wide uppercase">
-          <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-          <span>CBSL Regulated • Licensed Specialised Bank</span>
-        </div>
       </div>
     </motion.div>
   );
