@@ -425,8 +425,7 @@ export default function App() {
             <SDBLogo size="sm" showSubtitle={true} />
           </div>
 
-          <div className="text-center sm:text-right text-[11px] text-slate-400 space-y-0.5">
-            <div>Licensed Specialised Bank regulated by the Central Bank of Sri Lanka (CBSL).</div>
+          <div className="text-center sm:text-right text-[11px] text-slate-400">
             <div>Colombo International Motor Show 2025/2026 • Official Financial Services Partner</div>
           </div>
         </div>
