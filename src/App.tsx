@@ -16,6 +16,7 @@ import { PreApprovalPassModal } from './components/PreApprovalPassModal';
 import { SavedScansModal } from './components/SavedScansModal';
 import { PavilionModal } from './components/PavilionModal';
 import { SDBLogo } from './components/SDBLogo';
+import { SplashScreen } from './components/SplashScreen';
 import {
   Sparkles,
   Camera,
@@ -82,6 +83,7 @@ export default function App() {
   const [isPreApprovalModalOpen, setIsPreApprovalModalOpen] = useState(false);
   const [isSavedScansModalOpen, setIsSavedScansModalOpen] = useState(false);
   const [isPavilionModalOpen, setIsPavilionModalOpen] = useState(false);
+  const [showSplash, setShowSplash] = useState(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -206,6 +208,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-100/70 text-slate-900 flex flex-col font-sans">
+      {/* Animated Splash Screen */}
+      {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+
       {/* Top Header */}
       <Header
         userProfile={userProfile}
