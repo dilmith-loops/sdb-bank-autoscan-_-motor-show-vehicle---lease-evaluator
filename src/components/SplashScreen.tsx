@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { withBasePath } from '../utils/basePath';
 import { Sparkles, ShieldCheck } from 'lucide-react';
 
@@ -12,7 +12,6 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
   onFinish,
   minDuration = 2200,
 }) => {
-  const [isVisible, setIsVisible] = useState(true);
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState('Initializing AI Vision...');
 
@@ -36,7 +35,6 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       if (elapsed >= minDuration) {
         clearInterval(interval);
         setTimeout(() => {
-          setIsVisible(false);
           onFinish?.();
         }, 300);
       }
@@ -46,19 +44,16 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
   }, [minDuration, onFinish]);
 
   const handleSkip = () => {
-    setIsVisible(false);
     onFinish?.();
   };
 
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.02, filter: 'blur(8px)' }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-between bg-gradient-to-b from-slate-950 via-[#03152e] to-slate-950 text-white overflow-hidden select-none"
-        >
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.02, filter: 'blur(8px)' }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-between bg-gradient-to-b from-slate-950 via-[#03152e] to-slate-950 text-white overflow-hidden select-none"
+    >
           {/* Ambient Lighting & High-Tech Glow Effects */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-blue-600/20 via-cyan-500/15 to-transparent rounded-full blur-[100px] pointer-events-none" />
           <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-[90px] pointer-events-none" />
@@ -169,7 +164,5 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
             </div>
           </div>
         </motion.div>
-      )}
-    </AnimatePresence>
   );
 };

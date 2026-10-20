@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { AnimatePresence } from 'motion/react';
 import { UserProfile, VehicleScanRecord, VehicleInfo } from './types';
 import { SALARY_RANGES, SDB_MOTOR_SHOW_CONFIG } from './data/salaryRanges';
 import { calculateSDBLease } from './utils/leasingCalculator';
@@ -208,8 +209,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-100/70 text-slate-900 flex flex-col font-sans">
-      {/* Animated Splash Screen */}
-      {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+      {/* Animated Splash Screen — AnimatePresence lives here so the exit
+           animation completes before the component is removed from the DOM */}
+      <AnimatePresence>
+        {showSplash && <SplashScreen key="splash" onFinish={() => setShowSplash(false)} />}
+      </AnimatePresence>
 
       {/* Top Header */}
       <Header
