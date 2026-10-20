@@ -130,7 +130,13 @@ export const ScannerView: React.FC<ScannerViewProps> = ({
       )}
 
       {/* Main Viewfinder Card */}
-      <div className="relative bg-slate-950 rounded-3xl overflow-hidden shadow-xl border border-slate-800 aspect-[4/3] sm:aspect-[16/10] max-h-[460px] flex items-center justify-center">
+      <div
+        className={`relative bg-slate-950 rounded-3xl overflow-hidden shadow-xl border border-slate-800 ${
+          cameraActive
+            ? 'aspect-[4/3] sm:aspect-[16/10] max-h-[460px]'
+            : 'min-h-[340px] sm:min-h-[380px]'
+        } flex items-center justify-center`}
+      >
         {/* Active video stream */}
         <video
           ref={videoRef}
@@ -141,28 +147,28 @@ export const ScannerView: React.FC<ScannerViewProps> = ({
 
         {/* Camera inactive / placeholder screen */}
         {!cameraActive && (
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 flex flex-col items-center justify-center p-6 text-center text-white">
-            <div className="relative mb-4">
-              <div className="w-20 h-20 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-[#0077c8] animate-pulse">
-                <Car className="w-10 h-10 text-[#0077c8]" />
+          <div className="w-full h-full bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 flex flex-col items-center justify-center py-7 px-5 sm:p-7 text-center text-white">
+            <div className="relative mb-3 sm:mb-4">
+              <div className="w-14 h-14 sm:w-18 sm:h-18 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-[#0077c8] animate-pulse">
+                <Car className="w-7 h-7 sm:w-9 sm:h-9 text-[#0077c8]" />
               </div>
-              <div className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-amber-400 text-slate-950">
-                <Sparkles className="w-3.5 h-3.5" />
+              <div className="absolute -bottom-1 -right-1 p-1 rounded-full bg-amber-400 text-slate-950">
+                <Sparkles className="w-3 h-3" />
               </div>
             </div>
 
             <h3 className="text-base sm:text-lg font-bold font-heading mb-1 text-slate-100">
               SDB Bank AI Vehicle Scanner
             </h3>
-            <p className="text-xs text-slate-400 max-w-sm mb-5 leading-relaxed">
+            <p className="text-[11px] sm:text-xs text-slate-400 max-w-xs sm:max-w-sm mb-4 sm:mb-5 leading-relaxed">
               Point your phone camera at any car at the Motor Show to verify specs, condition, Sri Lankan market value, and personalized SDB lease rentals.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 w-full max-w-xs sm:max-w-none">
               <button
                 type="button"
                 onClick={() => startCamera('environment')}
-                className="flex items-center gap-2 bg-[#0077c8] hover:bg-[#005f9e] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg transition-transform active:scale-95"
+                className="flex items-center justify-center gap-2 bg-[#0077c8] hover:bg-[#005f9e] text-white text-xs font-bold py-2.5 px-4 rounded-xl shadow-lg transition-transform active:scale-95"
               >
                 <Camera className="w-4 h-4" />
                 <span>Launch Live Camera</span>
@@ -171,7 +177,7 @@ export const ScannerView: React.FC<ScannerViewProps> = ({
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl border border-slate-700 transition-colors"
+                className="flex items-center justify-center gap-2 bg-slate-800/90 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-2.5 px-4 rounded-xl border border-slate-700 transition-colors"
               >
                 <Upload className="w-4 h-4" />
                 <span>Upload Vehicle Photo</span>
@@ -179,7 +185,7 @@ export const ScannerView: React.FC<ScannerViewProps> = ({
             </div>
 
             {cameraError && (
-              <div className="mt-4 p-2.5 bg-rose-950/60 border border-rose-800/60 rounded-xl text-[11px] text-rose-300 max-w-sm flex items-center gap-2 text-left">
+              <div className="mt-3.5 p-2.5 bg-rose-950/60 border border-rose-800/60 rounded-xl text-[11px] text-rose-300 max-w-sm flex items-center gap-2 text-left">
                 <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
                 <span>{cameraError}</span>
               </div>
