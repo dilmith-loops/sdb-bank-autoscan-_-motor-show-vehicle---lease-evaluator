@@ -1,9 +1,8 @@
 ---
 deployment:
   tasks:
-    # 1. Update DEPLOYPATH to match your cPanel Node.js Application Root:
-    # Example: /home/USERNAME/sdb or /home/USERNAME/public_html/sdb
-    - export DEPLOYPATH=/home/$USER/sdb
+    # Actual cPanel path from server: /home/slmalzxh/uat.loopsintegrated.co/sdb
+    - export DEPLOYPATH=/home/$USER/uat.loopsintegrated.co/sdb
     - /bin/mkdir -p $DEPLOYPATH
     - /bin/cp -R * $DEPLOYPATH
     - /bin/mkdir -p $DEPLOYPATH/tmp
