@@ -1,9 +1,14 @@
 import { createServer } from 'http';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import next from 'next';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const port = parseInt(process.env.PORT || '3000', 10);
-const dev = process.env.NODE_ENV !== 'production';
-const app = next({ dev });
+// Ensure Next.js always runs in production mode and resolves .next relative to server.js directory
+const app = next({ dev: false, dir: __dirname });
 const handle = app.getRequestHandler();
 
 app
