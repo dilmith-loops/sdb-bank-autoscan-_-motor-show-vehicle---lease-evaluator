@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
+import { getGeminiApiKey } from '@/src/utils/geminiKey';
 
 // Gemini image analysis can take well over a minute
 export const maxDuration = 300;
-
 
 /**
  * POST /api/scan-vehicle
@@ -17,13 +17,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Vehicle image is required for analysis.' }, { status: 400 });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey || apiKey.trim() === '' || apiKey.includes('your_actual') || apiKey.startsWith('AQ.')) {
-      console.error('Invalid or missing GEMINI_API_KEY in process.env');
+    const apiKey = getGeminiApiKey();
+    if (!apiKey || apiKey.trim() === '' || apiKey.includes('your_actual')) {
+      console.error('Invalid or missing GEMINI_API_KEY');
       return NextResponse.json(
         {
           error: 'Gemini API key is not configured or invalid on the server.',
-          details: 'Please set a valid GEMINI_API_KEY (from https://aistudio.google.com/app/apikey) in .env or cPanel Environment Variables.',
+          details: 'Please set a valid GEMINI_API_KEY (from https://aistudio.google.com/app/apikey) in .env on your server.',
         },
         { status: 502 }
       );
