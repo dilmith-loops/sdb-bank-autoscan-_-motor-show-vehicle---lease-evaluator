@@ -16,6 +16,8 @@ try {
 const rawPort = process.env.PORT;
 const port = rawPort && !isNaN(Number(rawPort)) ? parseInt(rawPort, 10) : (rawPort || 3000);
 
+const { parse } = require('url');
+
 // Ensure Next.js always runs in production mode and resolves .next relative to server.js directory
 const app = next({ dev: false, dir: __dirname });
 const handle = app.getRequestHandler();
@@ -25,11 +27,19 @@ app
   .then(() => {
     createServer(async (req, res) => {
       try {
-        await handle(req, res);
+        const parsedUrl = parse(req.url, true);
+        await handle(req, res, parsedUrl);
       } catch (err) {
         console.error('Error handling request:', req.url, err);
+        try {
+          fs.appendFileSync(
+            path.join(__dirname, 'server_error.log'),
+            `[${new Date().toISOString()}] ${req.url} -> ${err && err.stack ? err.stack : err}\n`
+          );
+        } catch (_) {}
         res.statusCode = 500;
-        res.end('Internal Server Error');
+        res.setHeader('Content-Type', 'text/plain');
+        res.end(`Internal Server Error: ${err && err.message ? err.message : String(err)}`);
       }
     }).listen(port, () => {
       console.log(`> SDB AutoScan production server ready on port/socket: ${port}`);
