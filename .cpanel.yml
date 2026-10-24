@@ -1,6 +1,8 @@
 ---
 deployment:
   tasks:
+    # Ensure Node 20 is on PATH for any subprocesses
+    - export PATH=/opt/alt/alt-nodejs20/root/usr/bin:$PATH
     # Deployment destination path for the Node.js application
     - export DEPLOYPATH=/home/${USER:-slmalzxh}/uat.loopsintegrated.co/sdb
     - /bin/mkdir -p $DEPLOYPATH
