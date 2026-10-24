@@ -190,7 +190,8 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error(`Server returned ${response.status}`);
+        const errJson = await response.json().catch(() => null);
+        throw new Error(errJson?.details || errJson?.error || `Server returned ${response.status}`);
       }
 
       const data = await response.json();
@@ -228,7 +229,7 @@ export default function App() {
       setIsResultModalOpen(true);
     } catch (err: any) {
       console.error('Scan error:', err);
-      showToast('Vehicle scan failed. Please check your photo or try again.');
+      showToast(err?.message || 'Vehicle scan failed. Please check your photo or try again.');
     } finally {
       setIsAnalyzing(false);
     }

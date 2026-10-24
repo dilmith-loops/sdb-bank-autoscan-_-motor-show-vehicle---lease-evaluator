@@ -4,19 +4,10 @@ import { GoogleGenAI } from '@google/genai';
 // Gemini image analysis can take well over a minute
 export const maxDuration = 300;
 
-// Server-side Gemini initialization
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      'User-Agent': 'aistudio-build',
-    },
-  },
-});
 
 /**
  * POST /api/scan-vehicle
- * Multimodal vehicle inspection & Sri Lankan market valuation using Gemini 3.8 Flash
+ * Multimodal vehicle inspection & Sri Lankan market valuation using Gemini
  */
 export async function POST(req: Request) {
   try {
@@ -25,6 +16,27 @@ export async function POST(req: Request) {
     if (!imageBase64) {
       return NextResponse.json({ error: 'Vehicle image is required for analysis.' }, { status: 400 });
     }
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey || apiKey.trim() === '' || apiKey.includes('your_actual') || apiKey.startsWith('AQ.')) {
+      console.error('Invalid or missing GEMINI_API_KEY in process.env');
+      return NextResponse.json(
+        {
+          error: 'Gemini API key is not configured or invalid on the server.',
+          details: 'Please set a valid GEMINI_API_KEY (from https://aistudio.google.com/app/apikey) in .env or cPanel Environment Variables.',
+        },
+        { status: 502 }
+      );
+    }
+
+    const ai = new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        },
+      },
+    });
 
     // Clean base64 data header if present
     const cleanBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, '');
@@ -83,37 +95,59 @@ Return STRICT JSON complying with this exact structure:
 `;
 
     let vehicleData;
+    const candidateModels = [
+      process.env.GEMINI_MODEL,
+      'gemini-2.5-flash',
+      'gemini-2.0-flash',
+      'gemini-1.5-flash',
+      'gemini-3.8-flash',
+    ].filter(Boolean) as string[];
 
-    try {
-      const response = await ai.models.generateContent({
-        model: 'gemini-3.8-flash',
-        contents: {
-          parts: [
-            {
-              inlineData: {
-                mimeType,
-                data: cleanBase64,
+    let lastError: any = null;
+
+    for (const model of candidateModels) {
+      try {
+        const response = await ai.models.generateContent({
+          model,
+          contents: {
+            parts: [
+              {
+                inlineData: {
+                  mimeType,
+                  data: cleanBase64,
+                },
               },
-            },
-            {
-              text: promptText,
-            },
-          ],
-        },
-        config: {
-          responseMimeType: 'application/json',
-          temperature: 0.2,
-        },
-      });
+              {
+                text: promptText,
+              },
+            ],
+          },
+          config: {
+            responseMimeType: 'application/json',
+            temperature: 0.2,
+          },
+        });
 
-      const responseText = response.text?.trim() || '{}';
-      vehicleData = JSON.parse(responseText);
-    } catch (geminiError: any) {
-      console.error('Gemini vehicle analysis failed:', geminiError?.message);
+        const responseText = response.text?.trim() || '{}';
+        vehicleData = JSON.parse(responseText);
+        lastError = null;
+        break; // Successfully analyzed
+      } catch (err: any) {
+        lastError = err;
+        console.warn(`Gemini attempt with model ${model} failed:`, err?.message);
+        // If it's an authentication error, don't keep trying models
+        if (err?.message?.includes('API key') || err?.status === 401 || err?.status === 403) {
+          break;
+        }
+      }
+    }
+
+    if (!vehicleData) {
+      console.error('All Gemini model attempts failed:', lastError?.message);
       return NextResponse.json(
         {
-          error: 'AI vehicle analysis is unavailable. Please try again.',
-          details: geminiError?.message || 'Unknown Gemini error',
+          error: 'AI vehicle analysis is unavailable. Please check your Gemini API key.',
+          details: lastError?.message || 'Unknown Gemini error',
         },
         { status: 502 }
       );

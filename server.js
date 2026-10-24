@@ -4,6 +4,14 @@ const fs = require('fs');
 const path = require('path');
 const next = require('next');
 
+// Explicitly load .env and .env.production from __dirname for Passenger
+try {
+  const { loadEnvConfig } = require('@next/env');
+  loadEnvConfig(__dirname);
+} catch (e) {
+  console.warn('Could not load @next/env:', e.message);
+}
+
 // Phusion Passenger passes process.env.PORT which may be a numeric port, a unix socket path, or 'passenger'
 const rawPort = process.env.PORT;
 const port = rawPort && !isNaN(Number(rawPort)) ? parseInt(rawPort, 10) : (rawPort || 3000);
