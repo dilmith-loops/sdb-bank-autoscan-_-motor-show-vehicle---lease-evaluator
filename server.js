@@ -1,10 +1,6 @@
-import { createServer } from 'http';
-import { fileURLToPath } from 'url';
-import path from 'path';
-import next from 'next';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// CommonJS on purpose: CloudLinux Passenger loads the startup file with require()
+const { createServer } = require('http');
+const next = require('next');
 
 const port = parseInt(process.env.PORT || '3000', 10);
 // Ensure Next.js always runs in production mode and resolves .next relative to server.js directory
