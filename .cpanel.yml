@@ -1,10 +1,14 @@
 ---
 deployment:
   tasks:
-    # Actual cPanel path from server: /home/slmalzxh/uat.loopsintegrated.co/sdb
-    - export DEPLOYPATH=/home/$USER/uat.loopsintegrated.co/sdb
+    # Deployment destination path for the Node.js application
+    - export DEPLOYPATH=/home/${USER:-slmalzxh}/uat.loopsintegrated.co/sdb
     - /bin/mkdir -p $DEPLOYPATH
+    # Copy all application files to deployment path
     - /bin/cp -R * $DEPLOYPATH
+    # Ensure dotfiles like .htaccess are copied (Passenger configuration)
+    - /bin/cp -f .htaccess $DEPLOYPATH 2>/dev/null || true
     - /bin/mkdir -p $DEPLOYPATH/tmp
-    # 2. Trigger Phusion Passenger reload
+    # Trigger CloudLinux Phusion Passenger restart
     - /bin/touch $DEPLOYPATH/tmp/restart.txt
+
