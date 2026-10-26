@@ -66,8 +66,10 @@ if (!fs.existsSync(buildIdFile)) {
   try {
     const { execSync } = require('child_process');
     const nodeBinDir = '/opt/alt/alt-nodejs20/root/usr/bin';
+    const npmPath = path.join(nodeBinDir, 'npm');
+    const npmBin = fs.existsSync(npmPath) ? npmPath : 'npm';
     const envPath = fs.existsSync(nodeBinDir) ? `${nodeBinDir}:${process.env.PATH || ''}` : process.env.PATH;
-    execSync('npm run build', {
+    execSync(`${npmBin} run build`, {
       cwd: __dirname,
       stdio: 'inherit',
       env: { ...process.env, PATH: envPath },
