@@ -1,4 +1,8 @@
+# Disable directory listing so files are never exposed to the public
+Options -Indexes
+
 # DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerEnabled on
 PassengerAppRoot "/home/slmalzxh/uat.loopsintegrated.co/sdb"
 PassengerBaseURI "/sdb"
 PassengerNodejs "/opt/alt/alt-nodejs20/root/usr/bin/node"

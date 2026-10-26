@@ -8,8 +8,13 @@ deployment:
     - /bin/mkdir -p $DEPLOYPATH
     # Copy all application files to deployment path
     - /bin/cp -R * $DEPLOYPATH
-    # Ensure dotfiles like .htaccess are copied (Passenger configuration)
+    # Ensure dotfiles like .htaccess and .env are copied
     - /bin/cp -f .htaccess $DEPLOYPATH 2>/dev/null || true
+    - /bin/cp -f .env $DEPLOYPATH 2>/dev/null || true
+    # Copy existing .next build if available
+    - /bin/cp -R .next $DEPLOYPATH 2>/dev/null || true
+    # Build Next.js production bundle inside deployment directory
+    - cd $DEPLOYPATH && /opt/alt/alt-nodejs20/root/usr/bin/npm run build || true
     - /bin/mkdir -p $DEPLOYPATH/tmp
     # Trigger CloudLinux Phusion Passenger restart
     - /bin/touch $DEPLOYPATH/tmp/restart.txt
