@@ -8,7 +8,10 @@ coverage/
 .env.*
 .env*.local
 !.env.example
-.next/
+.next/cache/
+.next/dev/
+.next/diagnostics/
+.next/trace*
 next-env.d.ts
 *.tsbuildinfo
 *.pem

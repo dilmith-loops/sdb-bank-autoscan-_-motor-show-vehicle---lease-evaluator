@@ -1,0 +1,9 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/_global-error/page": "/_global-error",
+  "/api/health/route": "/api/health",
+  "/favicon.ico/route": "/favicon.ico",
+  "/icon.png/route": "/icon.png",
+  "/page": "/",
+  "/api/scan-vehicle/route": "/api/scan-vehicle"
+}
