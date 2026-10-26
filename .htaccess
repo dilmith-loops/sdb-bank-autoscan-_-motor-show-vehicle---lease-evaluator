@@ -1,5 +1,6 @@
 # Disable directory listing so files are never exposed to the public
 Options -Indexes
+DirectoryIndex index.html
 
 # DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
 PassengerEnabled on
